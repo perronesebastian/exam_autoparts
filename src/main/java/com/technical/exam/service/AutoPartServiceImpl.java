@@ -1,13 +1,16 @@
 package com.technical.exam.service;
 
 import com.technical.exam.models.AutoPartDto;
+import com.technical.exam.models.Request;
 import com.technical.exam.models.Response;
 import com.technical.exam.models.entity.AutoPart;
 import com.technical.exam.repository.AutoPartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,20 +20,20 @@ public class AutoPartServiceImpl implements AutoPartService {
     private AutoPartRepository repository;
 
     @Override
-    public void create(AutoPartDto dto) {
+    public void create(AutoPart request) {
         AutoPart autoPart = new AutoPart();
-        autoPart.setNumAutoPart(dto.getNumAutoPart());
-        autoPart.setDescriptionAutoPart(dto.getDescriptionAutoPart());
-        autoPart.setCodComplaint(dto.getCodComplaint());
-        autoPart.setCurrent(true);
+        autoPart.setNumAutoPart(request.getNumAutoPart());
+        autoPart.setDescriptionAutoPart(request.getDescriptionAutoPart());
+        autoPart.setCodComplaint(request.getCodComplaint());
+        autoPart.setCurrent(request.getCurrent());
         repository.save(autoPart);
     }
 
     @Override
-    public Response validateData(String policy, String numEngine, String numChassis, String numPatent) {
-        List<AutoPart> autoPartList = getAutoParts(numEngine, numChassis, numPatent);
+    public Response getDetail(Request request) {
+        List<AutoPart> autoPartList = getAutoPartList(request);
         Response response = new Response();
-        response.setNumPolicy(policy);
+        response.setNumPolicy(request.getPolicy());
         if (autoPartList.isEmpty()) {
             response.setState("NO_COMPLAINTS");
             return response;
@@ -40,12 +43,15 @@ public class AutoPartServiceImpl implements AutoPartService {
         return response;
     }
 
-    private List<AutoPart> getAutoParts(String numEngine, String numChassis, String numPatent) {
-        return repository.findAll().stream().filter(autoPart ->
-                autoPart.getNumAutoPart().equals(numEngine) ||
-                        autoPart.getNumAutoPart().equals(numChassis) ||
-                        autoPart.getNumAutoPart().equals(numPatent))
-                .collect(Collectors.toList());
+    private List<AutoPart> getAutoPartList(Request request) {
+        List<AutoPart> autoPartList = new ArrayList<>();
+        Optional<AutoPart> autoPartPatent = repository.findByNumAutoPart(request.getNumPatent());
+        Optional<AutoPart> autoPartEngine = repository.findByNumAutoPart(request.getNumEngine());
+        Optional<AutoPart> autoPartChassis = repository.findByNumAutoPart(request.getNumChassis());
+        if(autoPartPatent.isPresent()) autoPartList.add(autoPartPatent.get());
+        if(autoPartEngine.isPresent()) autoPartList.add(autoPartEngine.get());
+        if(autoPartChassis.isPresent()) autoPartList.add(autoPartChassis.get());
+        return autoPartList;
     }
 
 

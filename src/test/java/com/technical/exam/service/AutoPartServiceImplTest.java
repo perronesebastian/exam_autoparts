@@ -1,5 +1,6 @@
 package com.technical.exam.service;
 
+import com.technical.exam.models.Request;
 import com.technical.exam.models.entity.AutoPart;
 import com.technical.exam.repository.AutoPartRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -28,36 +30,22 @@ class AutoPartServiceImplTest {
     }
 
     @Test
-    void create() {
+    void getDetail() {
+        AutoPart autoPart = new AutoPart();
+        when(repository.findByNumAutoPart("c111111")).thenReturn(Optional.of(initAutoPart(autoPart)));
+        Request request = new Request();
+        request.setNumEngine("c111111");
+        assertEquals(service.getDetail(request).getRecords().size(), 1);
+        assertEquals(service.getDetail(request).getRecords().get(0).getCodComplaint(), "cod_ss1");
+        assertNull(service.getDetail(new Request()).getRecords());
     }
 
-    @Test
-    void validateData() {
-        when(repository.findAll()).thenReturn(initListAutoPart());
-        assertNotNull(service.validateData("policy_1", "", "c111111", "12312").getRecords().size());
-        assertEquals(service.validateData("policy_1", "2551", "c111111", "12312").getRecords().size(), 1);
-    }
-
-    private List<AutoPart> initListAutoPart() {
-        List<AutoPart> list = new ArrayList<>();
-
-        AutoPart autoPart1 = new AutoPart();
-        autoPart1.setId(111L);
-        autoPart1.setNumAutoPart("c111111");
-        autoPart1.setDescriptionAutoPart("chasis robado");
-        autoPart1.setCodComplaint("cod_ss1");
-        autoPart1.setCurrent(true);
-
-        AutoPart autoPart2 = new AutoPart();
-        autoPart2.setId(11122L);
-        autoPart2.setNumAutoPart("1122554");
-        autoPart2.setDescriptionAutoPart("motor robado");
-        autoPart2.setCodComplaint("cod_xsw1");
-        autoPart2.setCurrent(true);
-
-        list.add(autoPart1);
-        list.add(autoPart2);
-
-        return list;
+    private AutoPart initAutoPart(AutoPart autoPart) {
+        autoPart.setId(111L);
+        autoPart.setNumAutoPart("c111111");
+        autoPart.setDescriptionAutoPart("chasis robado");
+        autoPart.setCodComplaint("cod_ss1");
+        autoPart.setCurrent((byte) 1);
+        return autoPart;
     }
 }

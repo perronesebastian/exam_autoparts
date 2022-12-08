@@ -11,6 +11,5 @@ import java.util.Optional;
 @Repository
 public interface AutoPartRepository extends CrudRepository<AutoPart, Long> {
 
-    List<AutoPart> findAll();
-
+    Optional<AutoPart> findByNumAutoPart(String numAutoPart);
 }
