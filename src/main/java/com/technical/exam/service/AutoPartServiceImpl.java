@@ -25,7 +25,7 @@ public class AutoPartServiceImpl implements AutoPartService {
         autoPart.setNumAutoPart(request.getNumAutoPart());
         autoPart.setDescriptionAutoPart(request.getDescriptionAutoPart());
         autoPart.setCodComplaint(request.getCodComplaint());
-        autoPart.setCurrent(request.getCurrent());
+        autoPart.setValid(request.getValid());
         repository.save(autoPart);
     }
 

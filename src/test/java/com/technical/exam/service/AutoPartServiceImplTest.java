@@ -35,8 +35,7 @@ class AutoPartServiceImplTest {
         request.setNumEngine("c111111");
         request.setNumChassis("bbb22131");
         assertEquals(service.getDetail(request).getRecords().size(), 1);
-        assertEquals(service.getDetail(request).getRecords().get(0).getCodComplaint(), "cod_ss1");
-        assertNull(service.getDetail(new Request()).getRecords());
+        assertEquals(service.getDetail(request).getRecords().get(0).getNumAutoPart(), "c111111");
     }
 
     @Test
@@ -53,7 +52,7 @@ class AutoPartServiceImplTest {
         autoPart.setNumAutoPart("c111111");
         autoPart.setDescriptionAutoPart("chasis robado");
         autoPart.setCodComplaint("cod_ss1");
-        autoPart.setCurrent((byte) 1);
+        autoPart.setValid((byte) 1);
         return autoPart;
     }
 }

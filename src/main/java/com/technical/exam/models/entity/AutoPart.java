@@ -1,7 +1,6 @@
 package com.technical.exam.models.entity;
 
 import javax.persistence.*;
-import java.util.BitSet;
 
 @Entity
 public class AutoPart {
@@ -17,7 +16,7 @@ public class AutoPart {
 
     private String codComplaint;
 
-    private Byte current;
+    private Byte valid;
 
     public Long getId() {
         return id;
@@ -51,11 +50,11 @@ public class AutoPart {
         this.codComplaint = codComplaint;
     }
 
-    public Byte getCurrent() {
-        return current;
+    public Byte getValid() {
+        return valid;
     }
 
-    public void setCurrent(Byte current) {
-        this.current = current;
+    public void setValid(Byte valid) {
+        this.valid = valid;
     }
 }
