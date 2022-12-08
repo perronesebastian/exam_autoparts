@@ -9,7 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -29,30 +30,24 @@ class AutoPartServiceImplTest {
 
     @Test
     void getDetail() {
-        AutoPart autoPart = new AutoPart();
-        when(repository.findByNumAutoPart("c111111")).thenReturn(Optional.of(initDetail(autoPart)));
         Request request = new Request();
-        request.setNumEngine("c111111");
-        request.setNumChassis("bbb22131");
+        request.setPolicy("11KKX");
+        when(repository.findByNumAutoParts(request.getAutoParts())).thenReturn(initList());
         assertEquals(service.getDetail(request).getRecords().size(), 1);
         assertEquals(service.getDetail(request).getRecords().get(0).getNumAutoPart(), "c111111");
     }
 
-    @Test
-    void getDetailNull() {
+    private List<AutoPart> initList() {
         AutoPart autoPart = new AutoPart();
-        when(repository.findByNumAutoPart("c111111")).thenReturn(Optional.of(initDetail(autoPart)));
-        Request request = new Request();
-        request.setNumEngine("x12341");
-        assertNull(service.getDetail(request).getRecords());
-    }
-
-    private AutoPart initDetail(AutoPart autoPart) {
         autoPart.setId(111L);
         autoPart.setNumAutoPart("c111111");
         autoPart.setDescriptionAutoPart("chasis robado");
         autoPart.setCodComplaint("cod_ss1");
         autoPart.setValid((byte) 1);
-        return autoPart;
+
+        List<AutoPart> autoPartList = new ArrayList<>();
+        autoPartList.add(autoPart);
+
+        return autoPartList;
     }
 }

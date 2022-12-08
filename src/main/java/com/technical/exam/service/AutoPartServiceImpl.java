@@ -8,9 +8,7 @@ import com.technical.exam.repository.AutoPartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,16 +42,9 @@ public class AutoPartServiceImpl implements AutoPartService {
     }
 
     private List<AutoPart> getAutoPartList(Request request) {
-        List<AutoPart> autoPartList = new ArrayList<>();
-        Optional<AutoPart> autoPartPatent = repository.findByNumAutoPart(request.getNumPatent());
-        Optional<AutoPart> autoPartEngine = repository.findByNumAutoPart(request.getNumEngine());
-        Optional<AutoPart> autoPartChassis = repository.findByNumAutoPart(request.getNumChassis());
-        if(autoPartPatent.isPresent()) autoPartList.add(autoPartPatent.get());
-        if(autoPartEngine.isPresent()) autoPartList.add(autoPartEngine.get());
-        if(autoPartChassis.isPresent()) autoPartList.add(autoPartChassis.get());
+        List<AutoPart> autoPartList = repository.findByNumAutoParts(request.getAutoParts());
         return autoPartList;
     }
-
 
     private List<AutoPartDto> mapperToDto(List<AutoPart> request) {
         return request.stream().map(element -> {
